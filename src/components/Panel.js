@@ -2,15 +2,10 @@ import React, { Component } from "react";
 
 class Panel extends Component {
   render() {
-    const { label, value } =  this.props;
-    // const label = this.props.label;
-    // const value = this.props.value;
-    //const key = this.props.id
-    //cont id = this.props.id
+    const { id, label, value, onSelect } =  this.props;
+
     return (
-      <section
-      className="dashboard__panel"
-      >
+      <section className="dashboard__panel" onClick={() => onSelect}>
         <h1 className="dashboard__panel-header">{label}</h1>
         <p className="dashboard__panel-value">{value}</p>
       </section>
@@ -19,3 +14,5 @@ class Panel extends Component {
 }
 
 export default Panel;
+
+/**handleClick is a method that calls this.props.onSelect with the id of the panel. The onClick prop of the section element is set to this.handleClick, so handleClick will be called when the panel is clicked. */

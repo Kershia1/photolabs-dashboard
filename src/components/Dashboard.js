@@ -29,37 +29,59 @@ const data = [
 ];
 
 
-class Dashboard extends Component {
+function Dashboard(props) {
+  const [state, setState] = React.useState({ focused:null});
+
+    selectPanel(id){
+    this.setState({
+     focused: id
+    });
+   }
+}
+
+// class Dashboard extends Component {
   state = {
-    loading: false
+    loading: false,
+    focused: null // ? maybe track a specific panel(id) that is clicked? then
+    //use that to change the state of the panel clicked? toggles to each id
   }
 
   render() {
-    const dashboardClasses = classnames("dashboard");
+    const dashboardClasses = classnames("dashboard", {
+      //if focused is true, then apply the class "dashboard--focused"
+      "dashboard--focused": this.state.focused
+    });
+
 
     if (this.state.loading) {
       return <Loading />;
     }
 
-    const panels = data.map(dataMock => {
-      return <Panel key={dataMock.id} id={dataMock.id} label={dataMock.label} value={dataMock.value} />;
-    })
+      //Use the this.state.focused value to filter panel data before 
+      //converting it to components.
+
+    // const panels = data.map(dataMock => {
+
+    //   return <Panel key={dataMock.id} id={dataMock.id} label={dataMock.label} value={dataMock.value} />;
+    // })
+
+//If this.state.focused is null then return true for every panel.
+// If this.state.focused is equal to the Panel, then let it through the filter.
+    const panels = (this.state.focused ? data.filter(panel => this.state.focused === panel.id) : data)
+   .map(panel => (
+    <Panel
+     key={panel.id}
+     id={panel.id}
+     label={panel.label}
+     value={panel.value}
+     onSelect={event => this.selectPanel(panel.id)}// we are passing a reference to the instance method as a prop.
+    />
+   ));
 
     return <main className={dashboardClasses}>
       {panels}
     </main>;
   }
-}
-
-/**
- * equivalent to:
- * function Dashboard(props) {
-  const dashboardClasses = classnames("dashboard");
-  return <main className={dashboardClasses} />;
-}
- * 
- */
-
 
 export default Dashboard;
 
@@ -99,4 +121,15 @@ export default Dashboard;
     return <main className={dashboardClasses}>{panels}</main>;
   }
 }
+
+
+/**
+ * equivalent to:
+ * function Dashboard(props) {
+  const dashboardClasses = classnames("dashboard");
+  return <main className={dashboardClasses} />;
+}
+ * 
+ react tutorial 
+https://stackoverflow.com/questions/41027663/how-to-map-an-array-of-objects-in-react
  */
